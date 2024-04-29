@@ -61,7 +61,7 @@ def main():
     st.markdown(CUSTOM_STYLE, unsafe_allow_html=True)
 
     # Title
-    st.title("Weather App by Olanle")
+    st.title("Sky View")
 
     # Input for city
     city = st.text_input("Enter City:", "")
