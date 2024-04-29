@@ -1,6 +1,7 @@
 import requests
 from PIL import Image
 import streamlit as st
+from datetime import datetime
 
 # Constants
 API_KEY = "9f1e1d3a18d40be562129baafe0dae67"
@@ -34,25 +35,27 @@ CUSTOM_STYLE = """
 """
 
 
-# Function to fetch weather data
-def get_weather(city):
-    url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&units=imperial&APPID={API_KEY}"
+# Function to fetch forecast weather data
+def get_forecast_weather(city):
+    url = f"http://api.openweathermap.org/data/2.5/forecast?q={city}&units=metric&appid={API_KEY}"
     response = requests.get(url)
 
     if response.status_code == 404:
-        st.error("City Not Found")
+        st.error("Forecast weather data not available")
         return None
     else:
         # Parse the response JSON to get weather information
         weather_data = response.json()
-        temperature = int(((weather_data['main']['temp']) - 32) * (5 / 9))
-        description = weather_data['weather'][0]['description']
-        city_name = weather_data['name']
-        country = weather_data['sys']['country']
+        forecast = []
+        for data in weather_data['list']:
+            timestamp = data['dt']
+            dt_object = datetime.fromtimestamp(timestamp)
+            temperature = data['main']['temp']
+            description = data['weather'][0]['description']
+            icon_url = f"https://openweathermap.org/img/wn/{data['weather'][0]['icon']}.png"
+            forecast.append([icon_url, temperature, description, dt_object])
 
-        # Get the icon URL and return all the weather information
-        icon_url = f"https://openweathermap.org/img/wn/{weather_data['weather'][0]['icon']}.png"
-        return [icon_url, temperature, description, city_name, country]
+        return forecast
 
 
 # Main function
@@ -69,26 +72,35 @@ def main():
     # Search button
     if st.button("Search"):
         if city:
-            result = get_weather(city)
-            if result:
-                # Unpack the weather information
-                icon_url, temperature, description, city_name, country = result
+            forecast = get_forecast_weather(city)
+            if forecast:
+                # Display forecast weather information
+                st.subheader("Upcoming Forecast")
+                row_counter = 0
+                for i in range(0, len(forecast), 2):
+                    if row_counter % 2 == 0:
+                        col1, col2 = st.columns(2)
+                        with col1:
+                            display_forecast_entry(forecast[i])
+                        with col2:
+                            if i + 1 < len(forecast):
+                                display_forecast_entry(forecast[i + 1])
+                    row_counter += 1
 
-                # Display city and country
-                st.markdown(f"<h2 style='text-align:center;'>{city_name}, {country}</h2>", unsafe_allow_html=True)
 
-                # Display weather icon
-                image = Image.open(requests.get(icon_url, stream=True).raw)
-                image = image.resize((100, 100))  # Adjust the size here
-                st.image(image, caption='', use_column_width=True)
-
-                # Display temperature
-                st.markdown(f"<p style='text-align:center;font-size:20px;'>Temperature: {temperature}°C</p>",
-                            unsafe_allow_html=True)
-
-                # Display weather description
-                st.markdown(f"<p style='text-align:center;font-size:20px;'>Description: {description}</p>",
-                            unsafe_allow_html=True)
+# Function to display forecast entry
+def display_forecast_entry(data):
+    icon_url, temperature, description, dt_object = data
+    # Display date and time
+    st.markdown(f"**{dt_object.strftime('%A, %d %B %Y %H:%M')}**")
+    # Display weather icon
+    image = Image.open(requests.get(icon_url, stream=True).raw)
+    st.image(image, caption='', width=100)
+    # Display temperature
+    st.write(f"Temperature: {temperature}°C")
+    # Display weather description
+    st.write(f"Description: {description}")
+    st.write("---")
 
 
 # Run the app
