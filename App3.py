@@ -92,7 +92,7 @@ def main():
 def display_forecast_entry(data):
     icon_url, temperature, description, dt_object = data
     # Display date and time
-    st.markdown(f"**{dt_object.strftime('%A, %d %B %Y %H:%M')}**")
+    st.markdown(f"**{dt_object.strftime('%A, %d %B %Y %I:%M %p')}**")
     # Display weather icon
     image = Image.open(requests.get(icon_url, stream=True).raw)
     st.image(image, caption='', width=100)
