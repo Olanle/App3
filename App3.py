@@ -10,6 +10,7 @@ CUSTOM_STYLE = """
     .stTextInput>div>div>input {
         background-color: #0c061a !important;
         border: 3px Groove #ffffff !important;
+        color: white !important;
         border-radius: 2px !important;
         padding: 10px !important;
     }
