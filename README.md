@@ -1,46 +1,50 @@
-🌦️ Sky View Weather Forecast
-Sky View is a sleek, web-based weather application built with Streamlit. It fetches real-time 5-day weather forecasts using the OpenWeatherMap API and displays them in a clean, dual-column layout with custom-styled UI elements.
+# Sky View 🌤️
 
-✨ Features
-Real-time Forecasts: Fetches up-to-date weather data including temperature and atmospheric conditions.
+A lightweight weather forecast app built with **Streamlit** that displays upcoming weather conditions for any city using the OpenWeatherMap API.
 
-Visual Icons: Displays official weather icons corresponding to the current conditions.
+---
 
-Custom UI: Enhanced with custom CSS for a dark-themed, modern input and button design.
+## Features
 
-Responsive Layout: Uses a 2-column grid to display upcoming forecast intervals.
+- Search weather forecasts by city name
+- Displays temperature, conditions, and weather icons
+- Shows forecasts in a clean 2-column grid layout
+- Custom dark-themed UI
 
-🛠️ Tech Stack
-Python 3.x
+---
 
-Streamlit (Web Interface)
+## Requirements
 
-Requests (API Calls)
+```
+streamlit
+requests
+Pillow
+```
 
-Pillow (PIL) (Image Processing)
+Install with:
 
-OpenWeatherMap API (Weather Data)
-
-🚀 Getting Started
-1. Prerequisites
-Ensure you have Python installed, then install the required dependencies:
-
-Bash
+```bash
 pip install streamlit requests Pillow
-2. Configuration
-The app uses an OpenWeatherMap API key. In the current script, it is hardcoded as:
-API_KEY = "9f1e1d3a18d40be562129baafe0dae67"
+```
 
-Note: For production or public repositories, it is recommended to use Streamlit Secrets or environment variables to store your API keys.
+---
 
-3. Running the App
-Navigate to the project directory and run:
+## Setup
 
-Bash
-streamlit run your_filename.py
-🖥️ Usage
-Enter a City Name in the search bar.
+1. Grab a free API key from [openweathermap.org](https://openweathermap.org/api)
+2. Replace the `API_KEY` value in the script with your own key
+3. Run the app:
 
-Click the Search button.
+```bash
+streamlit run app.py
+```
 
-View the chronological forecast including dates, times, temperatures (in Celsius), and conditions.
+---
+
+## Usage
+
+Enter a city name in the search box and hit **Search** to load the 5-day / 3-hour forecast.
+
+---
+
+> ⚠️ **Note:** Keep your API key private — avoid committing it directly in source code. Consider using environment variables or a `.env` file instead.
